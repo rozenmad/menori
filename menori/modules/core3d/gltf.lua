@@ -516,7 +516,7 @@ local function load_image(io_read, path, images, texture)
 	end
 
 	local image_source
-	if love._version_major >= 12 then
+	if love._version_major > 11 then
 		image_source = love.graphics.newTexture(image_data, {
 			debugname = image.name,
 			linear = true,

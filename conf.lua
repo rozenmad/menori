@@ -1,7 +1,7 @@
 function love.conf(t)
     t.window.width = 960
     t.window.height = 480
-    if love._version_major >= 12 then
+    if love._version_major > 11 then
         t.window.depth = true
     else
         t.window.depth = 24

@@ -527,7 +527,7 @@ local function load_image(io_read, path, images, texture)
 	end
 	image_data:release()
 	return {
-		source = image_source,
+		source = image_source
 	}
 end
 

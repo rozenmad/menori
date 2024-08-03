@@ -105,7 +105,7 @@ local attribute_aliases = {
 
 local function get_primitive_modes_constants(mode)
 	if mode == 0 then
-		return 'points'
+		return 'vertices'
 	elseif mode == 1 then
 	elseif mode == 2 then
 	elseif mode == 3 then
@@ -515,10 +515,19 @@ local function load_image(io_read, path, images, texture)
 		image_data = love.image.newCompressedData(image_raw_data)
 	end
 
-	local image_source = love.graphics.newImage(image_data)
+	local image_source
+	if love._version_major >= 12 then
+		image_source = love.graphics.newTexture(image_data, {
+			debugname = image.name,
+			linear = true,
+			mipmaps = true,
+		})
+	else
+		image_source = love.graphics.newImage(image_data)
+	end
 	image_data:release()
 	return {
-		source = image_source
+		source = image_source,
 	}
 end
 

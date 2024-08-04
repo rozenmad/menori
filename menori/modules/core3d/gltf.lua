@@ -430,7 +430,7 @@ local function parse_wrap(value)
 	value == 10497 then
 		return 'repeat'
 	else
-		return 'clamp'
+		return 'repeat'
 	end
 end
 

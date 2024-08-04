@@ -115,7 +115,7 @@ end
 -- @tparam table format Vertex format table.
 function Mesh.get_attribute_index(attribute, format)
       for i, v in ipairs(format) do
-            if v[1] == attribute then
+            if v[1] == attribute or v.name == attribute then
                   return i
             end
       end

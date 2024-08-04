@@ -17,7 +17,6 @@ uniform mat4 inv_projection;
 // reconstruct the view space positions of pixels from the depth buffer
 vec3 get_position(vec2 uv) {
     float z = Texel(depth24_c, uv).r * 2.0 - 1.0;
-    //z *= -1;
     vec4 clipSpacePosition = vec4(uv * 2.0 - 1.0, z, 1.0);
     vec4 viewSpacePosition = inv_projection * clipSpacePosition;
     viewSpacePosition /= viewSpacePosition.w;

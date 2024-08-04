@@ -56,7 +56,10 @@ function Environment:send_uniforms_to(shader)
 
 	local render_to_canvas = love.graphics.getCanvas() ~= nil
 	temp_projection_m:copy(camera.m_projection)
-	if render_to_canvas then temp_projection_m[6] = -temp_projection_m[6] end
+
+	if love._version_major <= 11 and render_to_canvas then
+		temp_projection_m[6] = -temp_projection_m[6]
+	end
 
 	shader:send("m_view", 'column', camera.m_view.data)
 	shader:send("m_projection", 'column', temp_projection_m.data)

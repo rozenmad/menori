@@ -13,7 +13,7 @@ Camera for 2D scenes.
 
 local modules = (...):match('(.*%menori.modules.)')
 
-local app   = require (modules .. 'app')
+local app   = require (modules .. 'deprecated.app')
 local class = require (modules .. 'libs.class')
 local ml    = require (modules .. 'ml')
 
@@ -99,7 +99,6 @@ function camera:_apply_transform()
       --love.graphics.applyTransform(love.math.newTransform(-self.x, -self.y, self.angle, sx, sy, self.ox, self.oy))
       love.graphics.applyTransform(self.matrix:to_temp_transform_object())
 end
-
 
 --- Get viewport.
 -- @treturn number x

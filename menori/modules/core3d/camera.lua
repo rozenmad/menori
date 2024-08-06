@@ -13,8 +13,8 @@ Perspective camera class.
 
 local modules = (...):match('(.*%menori.modules.)')
 local class = require (modules .. 'libs.class')
-local ml = require (modules .. 'ml')
-local app = require (modules .. 'app')
+local ml 	= require (modules .. 'ml')
+local app   = require (modules .. 'deprecated.app')
 
 local mat4 = ml.mat4
 local vec2 = ml.vec2

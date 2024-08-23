@@ -783,12 +783,12 @@ function mat4.unproject(win, model, proj, viewport)
 	pos.x = ((pos.x - viewport[1]) / viewport[3])
 	pos.y = ((pos.y - viewport[2]) / viewport[4])
 	pos.x = pos.x * 2 - 1
-	pos.y = pos.y * 2 - 1
+	pos.y = pos.y *-2 + 1
 	pos.z = pos.z * 2 - 1
 	pos.w = pos.w * 2 - 1
 
 	local m = (proj * model):inverse()
-	m:multiply_vec4(pos)
+	m:multiply_vec4(pos, pos)
 	return vec3(pos.x / pos.w, pos.y / pos.w, pos.z / pos.w)
 end
 

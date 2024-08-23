@@ -26,7 +26,7 @@ function love.load()
 
 	root_node = menori.Node()
 
-	local gltf = menori.glTFLoader.load('example_assets/etrian_odyssey_3_monk/scene.gltf')
+	local gltf = menori.glTFLoader.load('examples/assets/etrian_odyssey_3_monk.glb')
 	local scenes = menori.NodeTreeBuilder.create(gltf, function (scene, builder)
 		animations = menori.glTFAnimations(builder.animations)
 		animations:set_action(1)

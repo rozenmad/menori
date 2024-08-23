@@ -186,7 +186,7 @@ function scene:render()
 		y = y + 15
 	end
 	love.graphics.print("SSAO radius (hold Q or E): " .. self.ssao_radius, 10, y)
-	love.graphics.print("Hold mouse right button to move camera.", 10, y+30)
+	love.graphics.print("Hold the right mouse button to rotate the camera.", 10, y+30)
 	love.graphics.print("Use mousewheel for zoom.", 10, y+45)
 	love.graphics.setColor(1, 1, 1, 1)
 end

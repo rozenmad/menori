@@ -75,10 +75,13 @@ end
 -- @tparam number y screen position y
 -- @tparam number z screen position z
 -- @treturn vec2 object
-function PerspectiveCamera:world_to_screen_point(x, y, z)
+function PerspectiveCamera:world_to_screen_point(x, y, z, viewport)
 	if type(x) == 'table' then
+		viewport = y
 		x, y, z = x.x, x.y, x.z
 	end
+
+	viewport = viewport or {app:get_viewport()}
 
 	local m_proj = self.m_projection
 	local m_view = self.m_view
@@ -96,8 +99,8 @@ function PerspectiveCamera:world_to_screen_point(x, y, z)
 	)
 
 	local screen_space_pos = vec2(
-		(ndc_space_pos.x + 1) / 2 * app.w * app.sx,
-		(ndc_space_pos.y + 1) / 2 * app.h * app.sy
+		(ndc_space_pos.x + 1) / 2 * viewport[3],
+		(ndc_space_pos.y - 1) /-2 * viewport[4]
 	)
 
 	return screen_space_pos

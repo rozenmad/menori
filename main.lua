@@ -2,15 +2,16 @@ local menori = require 'menori'
 
 local scene_iterator = 1
 local example_list = {
-	{ title = "minimal", path = "examples.minimal.scene" },
-	{ title = "basic_lighting", path = "examples.basic_lighting.scene" },
+	{ title = "Minimal", path = "examples.minimal.scene" },
+	{ title = "Basic Lighting", path = "examples.basic_lighting.scene" },
 	{ title = "SSAO", path = "examples.SSAO.scene" },
+	{ title = "RaycastBVH", path = "examples.raycast_bvh.scene" },
 }
 for _, v in ipairs(example_list) do
 	local Scene = require(v.path)
 	menori.app:add_scene(v.title, Scene())
 end
-menori.app:set_scene('minimal')
+menori.app:set_scene('Minimal')
 
 function love.draw()
 	menori.app:render()
@@ -62,4 +63,7 @@ function love.keypressed(...)
 end
 function love.mousemoved(...)
 	menori.app:handle_event('mousemoved', ...)
+end
+function love.mousepressed(...)
+	menori.app:handle_event('mousepressed', ...)
 end

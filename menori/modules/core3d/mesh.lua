@@ -200,9 +200,9 @@ function Mesh:get_triangles_transform(matrix)
                   local v1 = vec3(mesh:getVertexAttribute(map[i + 0], attribute_index))
                   local v2 = vec3(mesh:getVertexAttribute(map[i + 1], attribute_index))
                   local v3 = vec3(mesh:getVertexAttribute(map[i + 2], attribute_index))
-                  v1 = matrix:multiply_vec3(v1, v1)
-                  v2 = matrix:multiply_vec3(v2, v2)
-                  v3 = matrix:multiply_vec3(v3, v3)
+                  matrix:multiply_vec3(v1, v1)
+                  matrix:multiply_vec3(v2, v2)
+                  matrix:multiply_vec3(v3, v3)
                   table.insert(triangles, {
                         {v1:unpack()},
                         {v2:unpack()},
@@ -242,7 +242,7 @@ function Mesh:get_vertices_transform(matrix, start, count)
       local vertices = {}
       for i = start, start + count - 1 do
             local v = vec3(mesh:getVertex(i))
-            v = matrix:multiply_vec3(v, v)
+            matrix:multiply_vec3(v, v)
             table.insert(vertices, {v:unpack()})
       end
       return vertices

@@ -144,8 +144,6 @@ function camera:set_position(x, y)
       self._update = true
       self.x = x or self.x
       self.y = y or self.y
-      self.x = self.x
-      self.y = self.y
 end
 
 --- Get camera position.
@@ -156,7 +154,7 @@ function camera:get_position()
 end
 
 function camera:get_bound()
-      return self.bound_w , self.bound_h
+      return self.bound_w, self.bound_h
 end
 
 --- Set camera bounding box.
@@ -164,7 +162,7 @@ end
 -- @tparam number h bounding box height.
 -- @tparam number pvx normalized center x inside bounding box.
 -- @tparam number pvy normalized center y inside bounding box.
-function camera:set_bounding_box(w, h, pvx, pvy)
+function camera:set_bounding_box(w, h)
       self.bound_w = w
       self.bound_h = h
 end

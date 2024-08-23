@@ -135,44 +135,60 @@ function sprite:draw(x, y, angle, sx, sy, ox, oy, kx, ky)
       love.graphics.draw(self.image, self.quads[self.index], x, y, angle, sx, sy, ox, oy, kx, ky)
 end
 
---- Sprite draw_ex function.
+--- Sprite draw_in_viewport function.
+-- Fits the sprite into the specified bounding rectangle.
 -- @tparam number x
 -- @tparam number y
--- @tparam string fit Must be 'max' or 'min'
+-- @tparam string fit Must be 'max', 'min', 'fill' or 'none'
 -- @tparam number bound_w Width of bounding volume
 -- @tparam number bound_h Height of bounding volume
--- @tparam number onx
--- @tparam number ony
+-- @tparam number align_nx normalized align x
+-- @tparam number align_ny normalized align y
 -- @tparam number angle
--- @tparam number kx
--- @tparam number ky
 -- @tparam number sx
 -- @tparam number sy
-function sprite:draw_ex(x, y, fit, bound_w, bound_h, onx, ony, angle, kx, ky, sx, sy)
-      local _, _, w, h = self:get_frame_viewport()
+-- @tparam number kx
+-- @tparam number ky
+function sprite:draw_in_viewport(x, y, fit, viewport_w, viewport_h, align_nx, align_ny, angle, sx, sy, kx, ky)
+      local iw, ih = self.image:getDimensions()
 
-      sx = (1 * (sx or 1))
-      sy = (1 * (sy or 1))
+      sx = sx or 1
+      sy = sy or 1
 
+      align_nx = align_nx or 0.5
+      align_ny = align_ny or 0.5
+
+      viewport_w = viewport_w or iw
+      viewport_h = viewport_h or ih
+
+      local px = 0
+      local py = 0
       if
-      fit == 'max' then
-            local f = math.max(bound_w / w, bound_h / h)
-            sx = f*sx
-            sy = f*sy
+      fit == 'none' then
+      elseif
+      fit == 'fill' then
+            sx = viewport_w / iw
+            sy = viewport_h / ih
       elseif
       fit == 'min' then
-             local f = math.min(bound_w / w, bound_h / h)
-            sx = f*sx
-            sy = f*sy
+            sx = math.min(viewport_w / iw, viewport_h / ih)
+            sy = sx
+            px = (viewport_w - iw * sx) * align_nx
+            py = (viewport_h - ih * sy) * align_ny
+      elseif
+      fit == 'max' then
+            sx = math.max(viewport_w / iw, viewport_h / ih)
+            sy = sx
       end
 
-      local ox = self.px * w
-      local oy = self.py * h
+      local ox = align_nx * iw + self.px * iw
+      local oy = align_ny * ih + self.py * ih
 
-      x = x - w * sx * ((onx or 0) - self.px)
-      y = y - h * sy * ((ony or 0) - self.py)
+      x = x + px + align_nx * math.min(iw*sx, viewport_w)
+      y = y + py + align_ny * math.min(ih*sy, viewport_h)
 
       love.graphics.draw(self.image, self.quads[self.index], x, y, angle, sx, sy, ox, oy, kx, ky)
 end
+
 
 return sprite

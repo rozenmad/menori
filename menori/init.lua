@@ -28,6 +28,7 @@ local menori = {
       Camera                 = require(modules .. 'camera'),
       Node                   = require(modules .. 'node'),
       Scene                  = require(modules .. 'scene'),
+      SceneManager           = require(modules .. 'scenemanager'),
       Sprite                 = require(modules .. 'sprite'),
       SpriteLoader           = require(modules .. 'spriteloader'),
 
@@ -39,8 +40,6 @@ local menori = {
 
       -- deprecated
       GeometryBuffer         = require(modules .. 'deprecated.geometry_buffer'),
-      Application            = require(modules .. 'deprecated.application'),
-      ModelNodeTree          = require(modules .. 'deprecated.model_node_tree'),
       app                    = require(modules .. 'deprecated.app'),
 }
 

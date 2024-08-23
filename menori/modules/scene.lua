@@ -42,6 +42,7 @@ scene.layer_comp = layer_comp
 --- The public constructor.
 function scene:init()
       self.list_drawable_nodes = {}
+      self.transparent_flag = false
 end
 
 --- Recursive node render function.
@@ -142,11 +143,19 @@ function scene:_recursive_update_nodes(node)
 end
 
 function scene:render()
-      
+
 end
 
 function scene:update()
-      
+
+end
+
+function scene:on_enter()
+
+end
+
+function scene:on_leave()
+
 end
 
 return scene

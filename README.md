@@ -4,9 +4,12 @@ LÖVE library for 3D rendering based on scene graph. Support glTF 2.0 (implement
 
 Works on LÖVE 11.4 and higher.
 
-![preview_example](preview.png)
+[Web version](https://rozenmad.github.io/menori_demo/)
+Built using [love-web-builder](https://github.com/rozenmad/love-web-builder)
 
 [Documentation](https://rozenmad.github.io)
+
+![preview_example](preview.png)
 
 You can generate documentation using `ldoc -c menori/docs/config.ld -o index .`
 

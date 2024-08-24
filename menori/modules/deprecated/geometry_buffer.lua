@@ -9,10 +9,7 @@
 local modules = (...):match('(.*%menori.modules.)')
 local class = require (modules .. 'libs.class')
 
-local ffi
-if type(jit) == 'table' or jit.status() then
-	ffi = require 'ffi'
-end
+local ffi  = require (modules .. 'libs.ffi')
 
 local geometry_buffer = class('GeometryBuffer')
 

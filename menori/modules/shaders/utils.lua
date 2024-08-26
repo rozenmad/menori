@@ -15,14 +15,8 @@ local function add_shader_chunk(path, name)
       chunks[name .. '.glsl'] = readfile(path, name)
 end
 
-if love._version_major > 11 and ffi then
-      add_shader_chunk(modules .. 'chunks.', 'skinning_vertex_base')
-      add_shader_chunk(modules .. 'chunks.', 'skinning_vertex')
-else
-      add_shader_chunk(modules .. 'chunks.love11.', 'skinning_vertex_base')
-      add_shader_chunk(modules .. 'chunks.love11.', 'skinning_vertex')
-end
-
+add_shader_chunk(modules .. 'chunks.', 'skinning_vertex_base')
+add_shader_chunk(modules .. 'chunks.', 'skinning_vertex')
 add_shader_chunk(modules .. 'chunks.', 'normal')
 add_shader_chunk(modules .. 'chunks.', 'billboard_base')
 add_shader_chunk(modules .. 'chunks.', 'billboard')

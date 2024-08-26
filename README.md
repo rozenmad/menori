@@ -9,9 +9,9 @@ Built using [love-web-builder](https://github.com/rozenmad/love-web-builder)
 
 [Documentation](https://rozenmad.github.io)
 
-![preview_example](preview.png)
-
 You can generate documentation using `ldoc -c menori/docs/config.ld -o index .`
+
+![preview_example](preview.png)
 
 # Usage Example
 

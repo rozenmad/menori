@@ -5,5 +5,5 @@
       skin_matrix += VertexWeights.z * getBoneMatrix(VertexJoints.z);
       skin_matrix += VertexWeights.w * getBoneMatrix(VertexJoints.w);
 
-      vert_position = skin_matrix * vert_position;
+      vert_position = skin_matrix * inverse(m_model) * vert_position;
 #endif

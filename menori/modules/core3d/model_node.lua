@@ -16,42 +16,17 @@ local modules = (...):match('(.*%menori.modules.)')
 
 local Node     = require (modules .. 'node')
 local ml       = require (modules .. 'ml')
-local utils    = require (modules .. 'libs.utils')
 local Material = require (modules .. 'core3d.material')
 local ffi      = require (modules .. 'libs.ffi')
 
 local vec3     = ml.vec3
-local mat4     = ml.mat4
 local bound3   = ml.bound3
 
 local ModelNode = Node:extend('ModelNode')
 
-local joints_uniform_limit = 160
-local temp_mat = mat4()
-local root_mat = mat4()
-local temp_t = {}
+local matrix_bytesize = 16*4
 local data
-local instancebuffer
-local send_joints_matrices
-
-if love._version_major > 11 and ffi then
-      joints_uniform_limit = 256
-      data = love.data.newByteData(joints_uniform_limit * 16 * 4)
-      local bufferformat = {
-            {format="floatvec4", name=""},
-      }
-      instancebuffer = love.graphics.newBuffer(bufferformat, joints_uniform_limit * 16, {texel = true})
-
-      send_joints_matrices = function(shader)
-            instancebuffer:setArrayData(data)
-            shader:send('joints_matrices_buffer', instancebuffer)
-      end
-else
-      data = love.data.newByteData(joints_uniform_limit * 16 * 4)
-      send_joints_matrices = function(shader)
-            shader:send('joints_matrices', 'column', data)
-      end
-end
+local joints_texture
 
 --- The public constructor.
 -- @tparam menori.Mesh mesh object
@@ -122,29 +97,28 @@ function ModelNode:render(scene, environment)
       shader:send('m_model', 'column', self.world_matrix.data)
 
       if self.joints then
-            self:recursive_update_transform()
-            if self.skeleton_node then
-                  root_mat:copy(self.skeleton_node.world_matrix)
-            else
-                  root_mat:copy(self.world_matrix)
-            end
-            root_mat:inverse()
+            -- if self.skeleton_node then
+            --       shader:send('m_skeleton', self.skeleton_node.world_matrix.data)
+            -- end
 
-            for i = 1, math.min(joints_uniform_limit, #self.joints) do
+            local size = math.max(math.ceil(math.sqrt(#self.joints * 4) / 4) * 4, 4)
+            data = love.data.newByteData(size * size * 4 * 4)
+
+            for i = 1, #self.joints do
                   local node = self.joints[i]
-                  temp_mat:copy(node.world_matrix)
-                  temp_mat:multiply(node.inverse_bind_matrix)
-                  temp_mat:multiply(root_mat)
 
                   if ffi then
-                        local ptr = ffi.cast('char*', data:getFFIPointer()) + (i-1) * 16*4
-                        ffi.copy(ptr, temp_mat.e+1, 16*4)
+                        local ptr = ffi.cast('char*', data:getFFIPointer()) + (i-1) * matrix_bytesize
+                        ffi.copy(ptr, node.joint_matrix.e+1, matrix_bytesize)
                   else
-                        data:setFloat((i-1) * 16*4, temp_mat:to_table(temp_t))
+                        data:setFloat((i-1) * matrix_bytesize, node.joint_matrix.e)
                   end
             end
 
-            send_joints_matrices(shader)
+            local joints_texture_data = love.image.newImageData(size, size, 'rgba32f', data)
+            joints_texture = love.graphics.newImage(joints_texture_data)
+
+            shader:send('joints_texture', joints_texture)
       end
 
       local c = self.color

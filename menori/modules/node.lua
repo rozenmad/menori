@@ -43,7 +43,7 @@ function Node:init(name)
       self.local_matrix = mat4()
       self.world_matrix = mat4()
 
-      -- self.joint_matrix = mat4()
+      self.joint_matrix = mat4()
 
       self._transform_flag = true
 
@@ -222,10 +222,10 @@ function Node:update_transform(parent_world_matrix)
             world_matrix:copy(local_matrix)
       end
 
-      -- if self.inverse_bind_matrix then
-      --       self.joint_matrix:copy(world_matrix)
-      --       self.joint_matrix:multiply(self.inverse_bind_matrix)
-      -- end
+      if self.inverse_bind_matrix then
+            self.joint_matrix:copy(world_matrix)
+            self.joint_matrix:multiply(self.inverse_bind_matrix)
+      end
 end
 
 --- Get child Node by index.

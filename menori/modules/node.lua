@@ -97,7 +97,7 @@ end
 
 --- Set Node local scale.
 -- @tparam number sx
--- scale x or vec3
+-- scale sx or vec3
 -- @tparam number sy scale y
 -- @tparam number sz scale z
 function Node:set_scale(sx, sy, sz)

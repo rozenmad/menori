@@ -17,7 +17,8 @@ local modules = (...):match('(.*%menori.modules.)')
 local class = require (modules .. 'libs.class')
 
 local lovg = love.graphics
-local temp_environment
+
+local node_stack_t = {}
 
 local temp_renderstates = { clear = false }
 
@@ -45,7 +46,7 @@ function scene:init()
       self.transparent_flag = false
 end
 
---- Recursive node render function.
+--- Node render function.
 -- @tparam menori.Node node
 -- @tparam menori.Environment environment
 -- @tparam[opt] table renderstates
@@ -60,7 +61,33 @@ function scene:render_nodes(node, environment, renderstates, filter)
       environment._shader_object_cache = nil
       renderstates = renderstates or temp_renderstates
       filter = filter or default_filter
-      self:_recursive_render_nodes(node, false)
+
+      table.insert(node_stack_t, node)
+      while #node_stack_t > 0 do
+            local n = table.remove(node_stack_t)
+            if n.render_flag then
+                  local need_transform = n._transform_flag
+                  if need_transform then
+                        n:update_transform()
+                  end
+
+                  if n.render then
+                        table.insert(self.list_drawable_nodes, n)
+                  end
+
+                  if need_transform then
+                        for _, v in ipairs(n.children) do
+                              v._transform_flag = true
+                              table.insert(node_stack_t, v)
+                        end
+                  else
+                        for _, v in ipairs(n.children) do
+                              table.insert(node_stack_t, v)
+                        end
+                  end
+            end
+      end
+
       table.sort(self.list_drawable_nodes, renderstates.node_sort_comp or layer_comp)
 
       local camera = environment.camera
@@ -93,51 +120,31 @@ function scene:render_nodes(node, environment, renderstates, filter)
       return count
 end
 
-function scene:_recursive_render_nodes(node, transform_flag)
-      if not node.render_flag then
-            return
-      end
-      if node._transform_flag or transform_flag then
-            node:update_transform()
-            transform_flag = true
-      end
-
-      if node.render then
-            table.insert(self.list_drawable_nodes, node)
-      end
-
-      for _, v in ipairs(node.children) do
-            self:_recursive_render_nodes(v, transform_flag)
-      end
-end
-
---- Recursive node update function.
--- @tparam Node node
--- @tparam Environment environment
+--- Node update function.
+--@tparam Node node
+--@tparam Environment environment
 function scene:update_nodes(node, environment)
       assert(node, "in function 'scene:update_nodes' node does not exist.")
-      temp_environment = environment
-      self:_recursive_update_nodes(node)
-end
 
-function scene:_recursive_update_nodes(node)
-      if not node.update_flag then
-            return
-      end
+      table.insert(node_stack_t, node)
+      while #node_stack_t > 0 do
+            local n = table.remove(node_stack_t)
+            if n.update_flag then
+                  if n.update then
+                        n:update(self, environment)
+                  end
 
-      if node.update then
-            node:update(self, temp_environment)
-      end
-
-      local i = 1
-      local children = node.children
-      while i <= #children do
-            local child = children[i]
-            if child.detach_flag then
-                  table.remove(children, i)
-            else
-                  self:_recursive_update_nodes(child)
-                  i = i + 1
+                  local i = 1
+                  local children = n.children
+                  while i <= #children do
+                        local child = children[i]
+                        if child.detach_flag then
+                              table.remove(children, i)
+                        else
+                              table.insert(node_stack_t, child)
+                              i = i + 1
+                        end
+                  end
             end
       end
 end

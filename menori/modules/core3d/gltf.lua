@@ -396,7 +396,7 @@ local function create_material(textures, material)
 	if material.emissiveTexture then
 		local emissiveTexture = get_texture(textures, material.emissiveTexture)
 		uniforms.emissiveTexture = emissiveTexture.source
-		uniforms.occlusionTextureCoord = emissiveTexture.tcoord
+		uniforms.emissiveTextureCoord = emissiveTexture.tcoord
 	end
 	uniforms.emissiveFactor = material.emissiveFactor or {0, 0, 0}
 	uniforms.opaque = material.alphaMode == 'OPAQUE' or not material.alphaMode
